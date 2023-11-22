@@ -1,0 +1,18 @@
+{
+    "Name": "Pop.MomentumDash",
+    "Description": "",
+    "Version": "0.0.1",
+    "LoadPriority": 2,
+    "ConVars": [
+
+    ],
+    "Scripts": [
+        {
+        "Path": "gamer.gnut",
+        "RunOn" : "SERVER"
+        }
+    ],
+    "Localisation": [
+        "resources/localisation_%language%.txt"
+    ]
+}
