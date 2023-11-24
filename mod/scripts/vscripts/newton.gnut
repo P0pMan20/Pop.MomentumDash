@@ -1,0 +1,60 @@
+global function MP_Newton_INIT
+global function please
+global function MP_Newton_OnPrimaryAttack
+
+#if SERVER
+
+ClServer_MessageStruct function gib(ClServer_MessageStruct message) {
+
+    if (message.message.tolower().find("gib") != null) {
+        feed()
+    }
+    if (message.message.tolower().find("bigger") != null) {
+        entity seb = CreateElitePilot(TEAM_IMC, message.player.GetOrigin() + <400,0,0>, <0,0,0>)
+        // entity sebpai = CreateElitePilotAssassin(TEAM_IMC, message.player.GetOrigin() + <0,0,400>, <0,0,0>)
+        DispatchSpawn(seb)
+        // DispatchSpawn(sebpai)
+    }
+
+    return message
+}
+#endif
+
+
+void function MP_Newton_INIT(){
+    PrecacheWeapon("mp_ability_newton")
+
+}
+void function please(){
+    #if SERVER
+    AddCallback_OnReceivedSayTextMessage(gib)
+    #endif
+}
+
+
+#if SERVER
+void function feed(){
+	foreach(entity player in GetPlayerArray())
+		player.TakeOffhandWeapon(1)
+	foreach(entity player in GetPlayerArray())
+		player.GiveOffhandWeapon("mp_ability_newton" , 1)
+}
+    #endif
+
+
+var function MP_Newton_OnPrimaryAttack(entity weapon, WeaponPrimaryAttackParams attackParams){
+    print("guywat")
+    #if SERVER
+    entity player = weapon.GetWeaponOwner()
+    // look direction
+    vector direction = player.GetViewVector()
+    vector velocity = player.GetVelocity()
+    // use pythag to get magnitude
+    float magnitude = sqrt(pow(velocity.x,2) + pow(velocity.y,2) + pow(velocity.y,2))
+    vector newVelocity = (magnitude+100) * direction
+    player.SetVelocity(newVelocity)
+    #endif
+    return 1
+    
+}
+
